@@ -1,5 +1,5 @@
 import { addComponent, addEntity, createWorld, defineComponent, defineQuery, deleteWorld, IWorld, pipe, removeEntity, Types } from 'bitecs'
-import * as CANNON from 'cannon';
+import * as CANNON from 'cannon-es';
 
 export interface WorldEcs extends IWorld {
     time: {
@@ -37,7 +37,8 @@ const velocitySystem = (world: WorldEcs) => {
         inputs.z = InputComponent.vertical[entityId]
         inputs.normalize()
         inputs.scale(1, inputs)
-        const moveDirection = inputs.mult(MoveSpeedComponent.speed[entityId])
+        const speed = MoveSpeedComponent.speed[entityId]
+        const moveDirection = inputs.vmul(new CANNON.Vec3(speed, speed, speed))
         VelocityComponent.x[entityId] = moveDirection.x
         VelocityComponent.z[entityId] = moveDirection.z
     }
@@ -74,7 +75,9 @@ const physicsSystem = (world: WorldEcs) => {
         if (!body) continue
         body.velocity.set(VelocityComponent.x[entityId], VelocityComponent.y[entityId], VelocityComponent.z[entityId])
     }
-    world.physicsWorld.step(1 / 60, world.time.delta, 10)
+    world.physicsWorld.step(1 / 60, world.time.delta / 1000, 1000)
+    console.log(world.physicsWorld.stepnumber)
+    console.log(world.physicsWorld.time)
     for (let i = 0; i < entities.length; i++) {
         const entityId = entities[i]
         const body = world.physicsWorld.bodies.find((body) => body.id == entityId)
@@ -119,7 +122,7 @@ const testSystem = (world: WorldEcs) => {
 
 export class GameWorld {
     worldEcs: WorldEcs;
-    pipeline = pipe(bodySystem, velocitySystem, physicsSystem, testSystem, timeSystem, loggerSystem)
+    pipeline = pipe(timeSystem, bodySystem, velocitySystem, physicsSystem, testSystem, loggerSystem)
     playerMap = new Map<string, number>()
 
     constructor(id: string) {
@@ -159,7 +162,7 @@ export class GameWorld {
     removePlayer(sessionId: string) {
         const entityId = this.playerMap.get(sessionId)
         const body = this.worldEcs.physicsWorld.bodies.find((body) => body.id == entityId)
-        body.world.remove(body)
+        this.worldEcs.physicsWorld.removeBody(body)
         removeEntity(this.worldEcs, entityId)
     }
 

@@ -17,8 +17,8 @@ export class GameRoom extends Room<GameSchema> {
         this.roomId = await generateRoomId(this.LOBBY_CHANNEL, this.presence)
         this.setState(new GameSchema())
         this.gameWorld = new GameWorld(this.roomId)
-        this.setSimulationInterval((deltaTime) => this.update(deltaTime), 1000)
-        this.setPatchRate(40)
+        this.setSimulationInterval((deltaTime) => this.update(deltaTime), 1000 / 1)
+        this.setPatchRate(1000 / 15)
     }
 
     update(deltaTime: number) {
