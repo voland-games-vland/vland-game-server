@@ -6,6 +6,7 @@ import { Server } from "colyseus"
 import { WebSocketTransport } from '@colyseus/ws-transport'
 import { createServer } from 'http'
 import config from './config'
+import { GameRoom } from './game/game.room'
 
 const bootstrap = async () => {
     const app = express()
@@ -28,10 +29,13 @@ const bootstrap = async () => {
         }),
     })
 
+    gameServer.define(GameRoom.name, GameRoom)
+    console.log(`[GameServer]: define ${GameRoom.name}`)
+
 
     const port = config.port
     gameServer.listen(port)
-    console.log(`[GameServer] Listening on Port: ${port}`)
+    console.log(`[GameServer]: Listening on Port ${port}`)
 }
 
 bootstrap()
