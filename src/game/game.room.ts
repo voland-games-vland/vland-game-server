@@ -13,7 +13,7 @@ export class GameRoom extends Room<GameSchema> {
     // When room is initialized
     async onCreate(options: any) {
         console.log(`[GameRoom]: onCreate`)
-        this.maxClients = 1
+        this.maxClients = 2
         this.roomId = await generateRoomId(this.LOBBY_CHANNEL, this.presence)
         this.setState(new GameSchema())
         this.gameWorld = new GameWorld(this.roomId)
@@ -34,11 +34,13 @@ export class GameRoom extends Room<GameSchema> {
     // When client successfully join the room
     onJoin(client: Client, options: any, auth: any) {
         console.log(`[GameRoom-${this.roomId}]: onJoin`)
+        this.gameWorld.addPlayer(client.sessionId)
     }
 
     // When a client leaves the room
     onLeave(client: Client, consented: boolean) {
         console.log(`[GameRoom-${this.roomId}]: onLeave`)
+        this.gameWorld.removePlayer(client.sessionId)
     }
 
     // Cleanup callback, called after there are no more clients in the room. (see `autoDispose`)
