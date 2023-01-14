@@ -10,23 +10,27 @@ export interface WorldEcs extends IWorld {
 }
 
 
+const loggerSystem = (world: WorldEcs) => {
+    console.log(`[GameWorld-${world.name}]: elapsed time ${world.time.elapsed}`)
+    return world
+}
+
+
+const timeSystem = (world: WorldEcs) => {
+    const { time } = world
+    const now = performance.now()
+    const delta = now - time.then
+    time.delta = delta
+    time.elapsed += delta
+    time.then = now
+    return world
+}
+
+
 
 export class GameWorld {
     worldEcs: WorldEcs;
-    loggerSystem = (world: WorldEcs) => {
-        console.log(`[GameWorld-${world.name}]: elapsed time ${world.time.elapsed}`)
-        return world
-    }
-    timeSystem = (world: WorldEcs) => {
-        const { time } = world
-        const now = performance.now()
-        const delta = now - time.then
-        time.delta = delta
-        time.elapsed += delta
-        time.then = now
-        return world
-      }
-    pipeline = pipe(this.timeSystem, this.loggerSystem)
+    pipeline = pipe(timeSystem, loggerSystem)
 
     constructor (id: string) {
         this.worldEcs = createWorld({
