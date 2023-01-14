@@ -18,7 +18,7 @@ const bootstrap = async () => {
         challenge: true,
     })
 
-    app.use('/colyseus', basicAuthMiddleware, monitor())
+    // app.use('/colyseus', basicAuthMiddleware, monitor())
     app.get('/', function (req, res) {
         res.send('<h1>V-Land Game Server</h1><p>Running...🏃‍♂️💨</p><a href="/colyseus">Colyseus Monitoring</a>')
     })
