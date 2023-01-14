@@ -58,6 +58,8 @@ const bodySystem = (world: WorldEcs) => {
             shape: new CANNON.Box(new CANNON.Vec3(SizeComponent.x[entityId], SizeComponent.x[entityId], SizeComponent.x[entityId])),
         })
         body.collisionResponse = false
+        body.linearDamping = 0
+        body.angularDamping = 0
         body.id = entityId
         world.physicsWorld.addBody(body)
     }
@@ -76,8 +78,6 @@ const physicsSystem = (world: WorldEcs) => {
         body.velocity.set(VelocityComponent.x[entityId], VelocityComponent.y[entityId], VelocityComponent.z[entityId])
     }
     world.physicsWorld.step(1 / 60, world.time.delta / 1000, 1000)
-    console.log(world.physicsWorld.stepnumber)
-    console.log(world.physicsWorld.time)
     for (let i = 0; i < entities.length; i++) {
         const entityId = entities[i]
         const body = world.physicsWorld.bodies.find((body) => body.id == entityId)
@@ -151,7 +151,7 @@ export class GameWorld {
         addComponent(this.worldEcs, SizeComponent, entityId)
         MoveSpeedComponent.speed[entityId] = 5
         InputComponent.horizontal[entityId] = 1
-        InputComponent.vertical[entityId] = 1
+        InputComponent.vertical[entityId] = 0
         MassComponent.mass[entityId] = 1
         ShapeComponent.shape[entityId] = 1
         SizeComponent.x[entityId] = 1
