@@ -13,7 +13,7 @@ export class GameRoom extends Room<GameSchema> {
     // When room is initialized
     async onCreate(options: any) {
         console.log(`[GameRoom]: onCreate`)
-        this.maxClients = 2
+        this.maxClients = 12
         this.roomId = await generateRoomId(this.LOBBY_CHANNEL, this.presence)
         this.setState(new GameSchema())
         this.gameWorld = new GameWorld(this.roomId)
