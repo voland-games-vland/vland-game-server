@@ -12,6 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "@colyseus/monitor": "^0.15.1",
+    "@colyseus/schema": "^2.0.7",
     "@colyseus/ws-transport": "^0.15.0",
     "bitecs": "^0.3.38",
     "cannon-es": "^0.20.0",
