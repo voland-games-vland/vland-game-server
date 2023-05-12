@@ -64,7 +64,54 @@ export enum Weapon {
 
 export class WeaponSchema extends Schema {
     @type('string')
-    type: Weapon
+    weaponType: Weapon
+
+    @type('number')
+    attackPower = 10
+
+    @type('number')
+    attackRange = 5
+
+    @type('number')
+    attackTime = 0.2
+
+    @type('number')
+    attackSpeed = 1
+
+    @type('number')
+    attackCooldown = 0.2
+
+    @type('number')
+    moveSpeedPercentWhileAttacking = 0.5
+}
+
+export class WeaponMeleeSchema extends WeaponSchema {
+    @type('number')
+    coneAngleRadians = 90
+
+    @type('number')
+    numRays = 21
+}
+
+export enum Projectile {
+    Arrow = 'Arrow',
+    Bullet = 'Bullet',
+}
+
+export class WeaponRangedSchema extends WeaponSchema {
+    @type('string')
+    projectileType = Projectile
+
+    @type('number')
+    projectileSpeed = 10
+}
+
+export class ProjectileSchema extends Schema {
+    @type('string')
+    type = Projectile
+
+    @type(PositionSchema)
+    position: PositionSchema
 }
 
 export class UnitSchema extends Schema {
@@ -234,9 +281,33 @@ export class BlockSchema extends Schema {
     type: Block
 }
 
+export enum Daytime {
+    Morning = 'Morning',
+    Afternoon = 'Afternoon',
+    Dawn = 'Dawn',
+    Night = 'Night',
+  }
+
+export class MapSettingsSchema extends Schema {
+    @type('number')
+    teams: number
+
+    @type('number')
+    scoreToWin: number
+
+    @type('number')
+    timeLimitInSeconds: number
+
+    @type('string')
+    daytime: Daytime
+}
+
 export class GameSchema extends Schema {
     @type('number')
     gameSpeed = 1
+
+    @type(MapSettingsSchema)
+    mapSettings: MapSettingsSchema = new MapSettingsSchema()
 
     @type({ map: BlockSchema })
     blocks: MapSchema<BlockSchema> = new MapSchema<BlockSchema>()
@@ -247,6 +318,9 @@ export class GameSchema extends Schema {
     @type({ map: PlayerSchema })
     players: MapSchema<PlayerSchema> = new MapSchema<PlayerSchema>()
 
-    @type({ map: UnitSchema})
+    @type({ map: UnitSchema })
     units: MapSchema<UnitSchema> = new MapSchema<UnitSchema>()
+
+    @type({ map: ProjectileSchema })
+    projectiles: MapSchema<ProjectileSchema> = new MapSchema<ProjectileSchema>()
 }
