@@ -27,6 +27,7 @@ const bootstrap = async () => {
         transport: new WebSocketTransport({
             server: createServer(app),
         }),
+        publicAddress: config.publicHost
     })
 
     gameServer.define(GameRoom.name, GameRoom)
@@ -34,8 +35,9 @@ const bootstrap = async () => {
 
 
     const port = config.port
-    gameServer.listen(port)
-    console.log(`[GameServer]: Listening on Port ${port}`)
+    await gameServer.listen(port)
+    const host = config.publicHost == 'localhost' ? `http://${config.publicHost}` : `https://${config.publicHost}`
+    console.log(`[GameServer]: Listening on ${host}:${port || ''}`)
 }
 
 bootstrap()

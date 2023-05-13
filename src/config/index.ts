@@ -7,5 +7,6 @@ export default {
         password: process.env.COLYSEUS_MONITOR_AUTH_PASSWORD || 'admin'
       }
     }
-  }
+  },
+  publicHost: process.env.PUBLIC_HOST || 'localhost'
 }
