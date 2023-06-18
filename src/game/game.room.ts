@@ -19,16 +19,7 @@ export class GameRoom extends Room<GameSchema> {
         this.gameWorld = new GameWorld(this.roomId)
         this.setSimulationInterval((deltaTime) => this.update(deltaTime), 1000 / 1)
         this.setPatchRate(1000 / 15)
-        this.onMessage("action", (client, message) => {
-            //
-            // Triggers when 'action' message is sent.
-            //
-        });
         this.onMessage("*", (client, type, message) => {
-            //
-            // Triggers when any other type of message is sent,
-            // excluding "action", which has its own specific handler defined above.
-            //
             console.log(client.sessionId, "sent", type, message);
         });
     }
