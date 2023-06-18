@@ -8,5 +8,5 @@ export default {
       }
     }
   },
-  publicHost: process.env.PUBLIC_HOST || 'localhost'
+  publicHost: process.env.PUBLIC_HOST
 }

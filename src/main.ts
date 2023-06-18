@@ -7,6 +7,7 @@ import { WebSocketTransport } from '@colyseus/ws-transport'
 import { createServer } from 'http'
 import config from './config'
 import { GameRoom } from './game/game.room'
+import { playground } from '@colyseus/playground'
 
 const bootstrap = async () => {
     const app = express()
@@ -19,8 +20,9 @@ const bootstrap = async () => {
     })
 
     app.use('/colyseus', basicAuthMiddleware, monitor())
+    app.use('/playground', basicAuthMiddleware, playground);
     app.get('/', function (req, res) {
-        res.send('<h1>V-Land Game Server</h1><p>Running...🏃‍♂️💨</p><a href="/colyseus">Colyseus Monitoring</a>')
+        res.send('<h1>V-Land Game Server</h1><p>Running...🏃‍♂️💨</p><a href="/colyseus">Colyseus Monitoring</a><br/><a href="/playground">Colyseus Playground</a>')
     })
 
     const gameServer = new Server({
